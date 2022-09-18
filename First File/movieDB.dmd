@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="movieDB" id="D0CA9953-7083-470D-FAFE-920744912FA0" version="3.5">
+<createdBy>이지민</createdBy>
+<createdTime>2022-09-13 05:30:00 UTC</createdTime>
+<ownerDesignName>movieDB</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>D0CA9953-7083-470D-FAFE-920744912FA0</designId>
+</OSDM_Design>
