@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="MovieDB_1004" id="8999EFE0-246B-0BAD-4E1E-CEA6C3EDFCC1" version="3.5">
+<createdBy>shhong</createdBy>
+<createdTime>2019-09-02 14:05:57 UTC</createdTime>
+<ownerDesignName>2019_MovieDB1</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>8999EFE0-246B-0BAD-4E1E-CEA6C3EDFCC1</designId>
+</OSDM_Design>

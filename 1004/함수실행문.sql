@@ -1,0 +1,1 @@
+select get_length('star wars',1977) from dual;

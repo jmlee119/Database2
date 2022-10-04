@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="Movie_Type_Ex" id="D22AF704-7EE0-A887-0C6D-7A6A7DA319BD" version="3.5">
+<createdBy>626-prof</createdBy>
+<createdTime>2022-09-27 06:36:09 UTC</createdTime>
+<ownerDesignName>type_test</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>D22AF704-7EE0-A887-0C6D-7A6A7DA319BD</designId>
+</OSDM_Design>
