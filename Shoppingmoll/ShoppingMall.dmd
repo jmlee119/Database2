@@ -1,0 +1,8 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="ShoppingMall" id="8816D21D-C7B4-6504-B639-2E7D165C273B" version="3.5">
+<createdBy>jiminlee</createdBy>
+<createdTime>2022-09-27 16:14:52 UTC</createdTime>
+<ownerDesignName>ShoppingMall</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>8816D21D-C7B4-6504-B639-2E7D165C273B</designId>
+</OSDM_Design>
