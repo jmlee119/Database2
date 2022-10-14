@@ -1,0 +1,56 @@
+SELECT
+    p."info"."name"                   AS "name",
+    p.location,
+    COUNT(class_of_professor.classno) AS "Count_classNo",
+    p.departmentname
+FROM
+    class_of_professor,
+    professor p
+WHERE
+        p.no = class_of_professor.professorno
+    AND p.departmentname = '소프트웨어학과'
+GROUP BY
+    p."info"."name",
+    p.location,
+    p.departmentname
+
+
+SELECT
+    c.name,
+    room.no,
+    t.time,
+    t.day
+FROM
+    class_of_time,
+    time  t,
+    class c,
+    class_of_room,
+    room
+WHERE
+        t.day = class_of_time.classday
+    AND t.time = class_of_time.classtime
+    AND c.no = class_of_time.classno
+    AND c.no = class_of_room.classno
+    AND room.no = class_of_room.roomno
+    AND room.buildingname = class_of_room.roombuildingname
+    AND t.time >= 6
+    AND t.time <= 9
+    AND ( t.day LIKE '월'
+          OR t.day LIKE '수'
+          OR t.day LIKE '금' )
+
+SELECT
+    department.dname,
+    COUNT(DISTINCT professor.no) AS "교수의 수",
+    COUNT(DISTINCT assist.no)    AS "조교의 수"
+FROM
+    assist,
+    department,
+    professor
+WHERE
+        department.dname = assist.departmentname
+    AND department.dname = professor.departmentname
+GROUP BY
+    department.dname
+HAVING
+    COUNT(DISTINCT professor.no) >= 2
