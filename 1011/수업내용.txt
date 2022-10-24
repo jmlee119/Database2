@@ -1,0 +1,347 @@
+declare 
+begin 
+end
+orcale db 에 저장안되고 실행되고 끝
+그냥실행하는 ㅍ로그램ㅇ
+
+constant : 상수	
+:=  //assignment 기호
+
+dbms_output.put_line _lilne 은 줄 바꿈
+
+&Movie_Title 는 키 입력을 받는거 소스코드에서 한번만 받아야함 
+
+declare 
+    len    movie.length%type := 100;
+begin
+    select length into len
+    from movie
+    where title ='&Movie_Title' and year = &Movie_year;
+    dbms_output.put_line('상영시간 :'||len);
+end;
+결과 상영시간 :124
+
+--------------------------------------------------------------
+accept Movie_Title prompt '영화제목은 ?' 
+accept Movie_Year prompt '개봉년도는 ?' 
+
+declare 
+    len    movie.length%type := 100;
+    tt movie.title%type :='&Movie_Title';
+    yy movie.year%type := '&Movie_Year';
+    
+begin
+    select length into len
+    from movie
+    where title =tt and year =yy;
+    dbms_output.put_line(tt||'('||yy||'년 개봉) 상영시간 : '||len);
+end;
+결과 tar wars(1977년 개봉) 상영시간 : 124
+
+------------------------------------------------------
+declare
+begin
+exception 
+    when others then 
+         dbms_output.put_line(tt||'('||yy||'년 개봉) 검색실패 '||len);
+
+end;
+오류 처리 코드
+
+
+----------------------------------------------------------
+함수 만들기
+function 값을 하나 반환
+프로시저 턴은 없지만 여러개 반환
+
+create or replace function get_length(tt in movie.title%type , yy in movie.year%type) 
+RETURN movie.length%type
+get_length 함수 생성
+movie.title%type 이곳에 varchar2(100) 이런식으로 적는거 불가
+
+----------------------------------------------------------------------
+
+create or replace function get_length(tt in movie.title%type , yy in movie.year%type) 
+RETURN movie.length%type
+is
+    len movie.length%type;
+begin
+    select length into len
+    from movie
+    where title =tt and year =yy;
+    return len;
+end;
+
+accept Movie_Title prompt '영화제목은 ?' 
+accept Movie_Year prompt '개봉년도는 ?' 
+
+declare 
+    len    movie.length%type := 100;
+    tt movie.title%type :='&Movie_Title';
+    yy movie.year%type := '&Movie_Year';
+    
+begin
+    dbms_output.put_line(tt||'('||yy||'년 개봉) 상영시간 : '||get_length(tt,yy));
+
+exception 
+    when others then 
+         dbms_output.put_line(tt||'('||yy||'년 개봉) 검색실패 '||len);
+end;
+
+동시에 사용하는 법
+
+함수 실행하다가 오류 처리 하는 법
+is 
+begin
+exception 
+    when others then 
+    return -1;
+end;
+------------------------------------------------------------
+select get_length ('star wars' ,1977) from dual;
+함수 테스트 하는 문장
+--------------------------------------------------------------------------
+프로시저
+return 이 없어야함 
+
+in : 입력받음
+in out : 입력받고 출력
+
+create or replace procedure get_length2(tt in movie.title%type, yy in movie.year%type, len in out movie.length%type) -- out타입의 변수는 다시 선언 불필요!
+is
+begin
+    select length into len
+    from movie
+    where title = tt and year = yy; -- &키보드 입력, 한번만 나와야함
+exception
+    when others then -- 함수에서 미리 오류처리를 해줘야한다.
+        len := -1;
+end;
+
+선언
+
+
+ -----------------------------------------------
+   len := get_length(tt,yy);
+   get_length2(tt,yy,len);
+
+메인에서 함수 출력은 위에 꺼 , 프로시져는 밑에꺼 
+--------------------------------------------------------------------
+create or replace procedure get_length2(tt in movie.title%type, yy in movie.year%type, len in out movie.length%type) -- out타입의 변수는 다시 선언 불필요!
+is
+begin
+    select length into len
+    from movie
+    where title = tt and year = yy; -- &키보드 입력, 한번만 나와야함
+exception
+    when others then -- 함수에서 미리 오류처리를 해줘야한다.
+        len := -1;
+end;
+
+
+
+accept Movie_title prompt '영화 제목은?'
+accept Movie_year prompt '개봉 년도는?'
+
+declare
+    std studio.name%type;
+    len movie.length%type := 100;
+    tt movie.title%type := '&Movie_title';
+    yy movie.year%type := &Movie_year;
+begin
+    /*
+    select length into len
+    from movie
+    where title = tt and year = yy; -- &키보드 입력, 한번만 나와야함
+    */
+    -- len := get_length(tt,yy); -- get_length 함수 호출
+    get_length2(tt,yy,len,std);
+    if len >= 0 then
+        dbms_output.put_line(tt||'('||yy||'년 개봉) 상영시간 : '||len||' 제작사 : '||std);
+    else
+        dbms_output.put_line(tt||'('||yy||'년 개봉) 검색실패 !!! '||len);
+    end if;
+    
+exception
+    when others then
+        dbms_output.put_line(tt||'('||yy||'년 개봉) 검색실패 !!! '||len); -- 검색 실패하면 exception 문을 쓴다.
+end;
+
+선언 후 실행하는 문장
+-------------------------------------------------------------------------------
+
+
+accept Movie_title prompt '영화 제목은?'
+accept Movie_year prompt '개봉 년도는?'
+
+declare
+    std studio.name%type;
+    len movie.length%type := 100;
+    cnt integer; -- number(3);
+    tt movie.title%type := '&Movie_title';
+    yy movie.year%type := &Movie_year;
+begin
+    /*
+    select length into len
+    from movie
+    where title = tt and year = yy; -- &키보드 입력, 한번만 나와야함
+    */
+    -- len := get_length(tt,yy); -- get_length 함수 호출
+    get_movieinfo(tt,yy,len,std,cnt);
+    if len >= 0 then
+        dbms_output.put_line(tt||'('||yy||'년 개봉) 상영시간 : '||len||' 제작사 : '||std||', 출연배우 수 :'||cnt);
+    else
+        dbms_output.put_line(tt||'('||yy||'년 개봉) 검색실패 !!! '||len);
+    end if;
+    
+exception
+    when others then
+        dbms_output.put_line(tt||'('||yy||'년 개봉) 검색실패 !!! '||len); -- 검색 실패하면 exception 문을 쓴다.
+end;
+
+create or replace procedure get_movieinfo(tt in movie.title%type, yy in movie.year%type, 
+    len in out movie.length%type, std out studio.name%type, cnt out integer) -- out타입의 변수는 다시 선언 불필요!
+is
+begin
+    select length,studioname into len,std
+    from movie
+    where title = tt and year = yy; 
+    
+    select count(*) into cnt
+    from starsin
+    where movietitle =tt and movieyear =yy;
+    
+exception
+    when others then -- 함수에서 미리 오류처리를 해줘야한다.
+        len := -1;
+end;
+
+
+인원까지 출력
+
+------------------------------------------------------------------
+create or replace procedure get_movieinfo(tt in movie.title%type, yy in movie.year%type, 
+    len in out movie.length%type, std out studio.name%type, cnt out integer) -- out타입의 변수는 다시 선언 불필요!
+is
+begin
+    select length,studioname ,count(*) into len, std, cnt
+    from movie ,starsin
+    where title = tt and year = yy and title =movietitle and year = movieyear
+    group by length, studioname; 
+    /* 위로 넣음
+    select count(*) into cnt
+    from starsin
+    where movietitle =tt and movieyear =yy;
+   */ 
+exception
+    when others then -- 함수에서 미리 오류처리를 해줘야한다.
+        len := -1;
+        std := null;
+        cnt := -1;
+end;
+---------------------------------------------------------------------
+ type r_type is record  (
+        std studio.name%type,
+        len movie.length%type := 100,
+        cnt integer -- number(3);
+    );
+
+타입 선언 r_type 빼고는 문법이니 외울것
+
+
+declare
+    type r_type is record  (
+        std studio.name%type,
+        len movie.length%type := 100,
+        cnt integer -- number(3);
+    );
+    rec r_ty;
+    tt movie.title%type := 'star wars';
+    yy movie.year%type := 1977;
+begin
+    select length,studioname ,count(*) into rec
+    from movie ,starsin
+
+사용법
+
+
+-----------------------------------------------------------------------
+db 로 for 문 쓰는법
+
+declare
+begin
+    for m in (select * from movie) loop
+         dbms_output.put_line(m.title||'('||m.year||'년 개봉) 상영시간 : '||m.length||' 제작사 : '||m.studioname);
+    end loop;
+end;
+뭐라는거야 씨발 짜증나게 
+
+
+declare
+begin
+    for m in (select * from movie) loop
+         dbms_output.put_line(rpad(m.title||'('||m.year||'년 개봉)',42) ||'상영시간 : '||lpad(m.length,3)||' 제작사 : '||m.studioname);
+    end loop;
+end;
+
+정렬하는법 
+rpad , lpad 사용
+-------------------------------------------------------------------
+
+declare
+    cursor csr is select * from movie;
+begin
+    for m in csr loop
+         dbms_output.put_line(rpad(m.title||'('||m.year||'년 개봉)',50) ||'상영시간 : '||lpad(m.length,3)||' 제작사 : '||m.studioname);
+    end loop;
+end;
+
+csr 로 바꾸어 사용
+----------------------------------------------------------------------------
+루프 사용
+
+declare
+    cursor csr is select *from movie order by 1,2 desc;
+    m movie%rowtype;
+    
+begin
+    /*
+    for m in csr loop
+         dbms_output.put_line(rpad(m.title||'('||m.year||'년 개봉)',50) ||'상영시간 : '||lpad(m.length,3)||' 제작사 : '||m.studioname);
+    end loop;
+    */
+    open csr;
+    loop    
+        fetch csr into   m;
+        exit when csr%notfound ;-- 더 이상 검색할 것  없으면 참이 되고 무한루프에서 빠져나옴 
+        dbms_output.put_line(rpad(m.title||'('||m.year||'년 개봉)',50) ||'상영시간 : '||lpad(m.length,3)||' 제작사 : '||m.studioname);
+    end loop;  -- 무한루프
+    close csr;
+end;
+
+------------------------------------------
+type arr_ty is table of movie%rowtype index by varchar2(200);
+    m_arr   arr_ty;
+
+assoicate arr
+
+
+    m_arr   arr_ty;
+declare
+    type arr_ty is table of movie%rowtype index by varchar2(200);
+    m_arr   arr_ty;
+    i varchar2(200);
+    cursor csr is select *from movie order by 1,2 desc;
+--    m movie%rowtype;
+    
+begin
+    for m in csr loop
+        m_arr(m.title || m.year) := m;
+         --dbms_output.put_line(rpad(m.title||'('||m.year||'년 개봉)',50) ||'상영시간 : '||lpad(m.length,3)||' 제작사 : '||m.studioname);
+    end loop;
+   i := m_arr.first;
+   while is is not null loop
+        dbms_output.put_line(rpad(m_arr(i).title||'('||m.year||'년 개봉)',50) ||'상영시간 : '||lpad(m_arr(i).length,3)||' 제작사 : '||m_arr(i).studioname);
+        i := m_arr.next(i);
+   end loop;
+end;
